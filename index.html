@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MuxPuffHouse - Catálogo de Pods</title>
+    
+    <style>
+        /* Ensina o navegador a usar a sua fonte de grafite */
+        @font-face {
+            font-family: 'site'; /* Dá o apelido de 'site' para a fonte */
+            src: url('site.otf') format('opentype'); /* Procura o arquivo na pasta */
+        }
+
+        /* Guarda as cores do site para não precisar repetir toda hora */
+        :root {
+            --bg-color: #050505; /* Fundo preto */
+            --card-bg: #1e1e1e; /* Fundo cinza escuro dos cards */
+            --text-color: #f5f5f5; /* Texto claro */
+            --accent-color: #aa04aa; /* O seu roxo principal */
+            --secondary-text: #a4b0be; /* Cinza para textos secundários */
+        }
+
+        /* Configurações gerais da página inteira */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Fonte dos textos menores */
+            color: var(--text-color); /* Pinta os textos com a cor clara */
+            margin: 0; /* Tira as margens padrão do navegador */
+            padding: 20px; /* Dá um respiro nas bordas da tela */
+            display: flex; /* Começa a organizar os itens na tela... */
+            flex-direction: column; /* ...colocando um embaixo do outro */
+            align-items: center; /* Centraliza tudo no meio da tela */
+
+            /* Configuração do fundo de imagem */
+            background-color: var(--bg-color); /* Fundo preto por garantia */
+            background-image: url('site.png'); /* Puxa a sua imagem */
+            background-size: cover; /* Faz a imagem cobrir tudo */
+            background-position: center; /* Centraliza a imagem */
+            background-repeat: no-repeat; /* Não deixa a imagem se repetir */
+            background-attachment: fixed; /* Deixa o fundo parado quando rola a tela */
+        }
+
+        /* Cabeçalho onde fica o nome MuxPuffHouse */
+        header {
+            text-align: center; /* Centraliza o texto */
+            margin-bottom: 40px; /* Empurra os cards mais para baixo */
+        }
+
+        /* O título principal (h1) */
+        header h1 {
+            font-family: 'site', cursive; /* Usa a sua fonte grafite */
+            color: var(--accent-color); /* Pinta de roxo */
+            font-size: 3.5rem; /* Deixa a letra bem grande */
+            margin-bottom: 5px; /* Espaço pequeno até o subtítulo */
+        }
+
+        /* O subtítulo "Catálogo Oficial..." */
+        header p {
+            color: var(--secondary-text); /* Pinta de cinza */
+            font-size: 1.1rem; /* Tamanho da letra */
+            margin-top: 0; /* Tira o espaço sobrando em cima */
+        }
+
+        /* A caixa gigante que vai segurar todos os cartões de pods */
+        .catalog-container {
+            display: grid; /* Ativa o modo de grade */
+            /* Faz a mágica de criar colunas sozinhas dependendo do tamanho da tela */
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px; /* Distância entre um cartão e outro */
+            width: 100%; /* Ocupa a tela toda */
+            max-width: 1200px; /* Mas para de crescer se a tela for muito larga */
+        }
+
+        /* O visual de CADA cartão de pod */
+        .pod-card {
+            background-color: var(--card-bg); /* Fundo cinza escuro */
+            border-radius: 12px; /* Deixa as pontas redondinhas */
+            padding: 25px; /* Espaço para o texto não colar nas bordas */
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3); /* Sombrinha preta no fundo */
+            border-top: 4px solid var(--accent-color); /* Linha roxa em cima do card */
+            transition: transform 0.2s ease; /* Prepara para a animação do mouse */
+        }
+
+        /* O que acontece quando passa o mouse por cima do cartão */
+        .pod-card:hover {
+            transform: translateY(-5px); /* Dá um pulinho de 5 pixels para cima */
+        }
+
+        /* Nome do Pod dentro do cartão */
+        .pod-title {
+            font-size: 1.4rem; /* Tamanho da letra */
+            margin: 0 0 10px 0; /* Margem só embaixo */
+            color: #ffffff; /* Letra branca */
+        }
+
+        /* Preço do Pod */
+        .pod-price {
+            font-size: 1.5rem; /* Letra maior */
+            font-weight: bold; /* Letra gordinha (negrito) */
+            color: var(--accent-color); /* Cor roxa */
+            margin: 0 0 20px 0; /* Espaço embaixo */
+        }
+
+        /* Área onde fica o texto "Sabores Disponíveis:" */
+        .flavors-title {
+            font-size: 1rem;
+            color: var(--secondary-text);
+            border-bottom: 1px solid #333; /* Linha fininha separando a lista */
+            padding-bottom: 5px;
+            margin-bottom: 10px;
+        }
+
+        /* A lista de sabores (ul) */
+        .flavors-list {
+            list-style-type: none; /* Tira as bolinhas pretas padrão do HTML */
+            padding: 0;
+            margin: 0;
+        }
+
+        /* O visual de cada sabor da lista (li) */
+        .flavors-list li {
+            background-color: #2f3542; /* Fundo mais claro que o card */
+            margin-bottom: 8px; /* Espaço entre os sabores */
+            padding: 8px 12px; /* Espaço interno da caixinha do sabor */
+            border-radius: 6px; /* Pontas redondas */
+            font-size: 0.95rem;
+        }
+
+        /* Coloca a fumacinha antes de cada sabor automaticamente */
+        .flavors-list li::before {
+            content: '💨 ';
+            font-size: 1.1rem;
+        }
+
+        /* Estilo da mensagem quando não tem sabores */
+        .no-flavors {
+            color: #747d8c; /* Letra cinza escuro */
+            font-style: italic; /* Letra deitadinha */
+            font-size: 0.9rem;
+        }
+
+        /* === LINHAS NOVAS: VISUAL DO BOTÃO DO WHATSAPP === */
+        .whatsapp-button {
+            position: fixed; /* Deixa o botão travado na tela */
+            bottom: 20px; /* Distância do fundo da tela */
+            right: 20px; /* Distância do canto direito da tela */
+            background-color: #25d366; /* Verde oficial do WhatsApp */
+            color: white; /* Letra branca */
+            text-decoration: none; /* Tira a linha de baixo do texto */
+            padding: 12px 20px; /* Espaço dentro do botão */
+            border-radius: 50px; /* Deixa ele bem arredondado */
+            font-size: 1.1rem; /* Tamanho da letra */
+            font-weight: bold; /* Deixa o texto gordinho */
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5); /* Sombra para dar destaque */
+            display: flex; /* Ajuda a alinhar o emoji com o texto */
+            align-items: center; /* Centraliza os dois no meio do botão */
+            gap: 8px; /* Espacinho entre o emoji e o texto */
+            z-index: 1000; /* Garante que o botão fique na frente de tudo */
+            transition: transform 0.2s ease; /* Animação suave */
+        }
+
+        /* Efeito de quando passa o mouse ou aperta o botão */
+        .whatsapp-button:hover {
+            transform: scale(1.05); /* O botão dá uma leve crescidinha */
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>MuxPuffHouse</h1>
+        <p>Catálogo Oficial de Pods</p>
+    </header>
+
+    <div class="catalog-container" id="catalog">
+    </div>
+
+    <a href="https://wa.me/5551996155848?text=Olá!%20Vim%20pelo%20catálogo%20da%20MuxPuffHouse!" target="_blank" class="whatsapp-button">
+        💬 Pedir no WhatsApp
+    </a>
+
+    <script>
+        // SEU ESTOQUE: 
+        const produtos = [
+            {
+                modelo: "Dinner lady 50000 (2 tanques)",
+                preco: "175$",
+                sabores: ["Mint Ice / Pineapple Ice", "Grape Ice / Mint Ice"] 
+            },
+            {
+                modelo: "Elfbar bc pro 45000",
+                preco: "170$",
+                sabores: ["Grape Ice", "Cool Menthol","Watermelon Ice", "Pineapple POM", "Grape Twist", "Strawberry Ice"] 
+            },
+            {
+                modelo: "Black sheep 40000 (2 tanques)",
+                preco: "180$",
+                sabores: ["Blueberry Bubble / Sour Green Apple", "Grape / Menthol"]
+            },
+            {
+                modelo: "Ignite v300 30000",
+                preco: "150$",
+                sabores: ["Icy Mint", "Banana Coconut Water", "Minty Melon", "Watermelon Ice", "Strawberry Ice", "Aloe Grape Ice", "Strawberry Kiwi", "Strawberry Banana", "grape ice"]
+            },
+            {
+                modelo: "Elfbar ice king 40000",
+                preco: "160$",
+                sabores: ["Black Mint", "Triple Berry", "Neon Twist", "Dragon Strawnana", "Cherry Strazz", "Passion Flash", "Strawberry Spark", "Watermelon Ice"]
+            },
+            {
+                modelo: "Ignite v250 25000",
+                preco: "145$",
+                sabores: ["Grape Ice (dourado)", "Icy mint", "Strawberry Kiwi", "Blueberry", "Ice Watermelon Ice (dourado e preto)", "Strawberry Ice (dourado e preto)"]
+            },
+            {
+                modelo: "Elfbar bc 15000",
+                preco: "100$",
+                sabores: ["Strawberry Ice", "Watermelon Ice", "Strawberry Kiwi", "Sakura Grape"]
+            }
+        ];
+
+        // FUNÇÃO QUE MONTA O SITE
+        function renderizarCatalogo() {
+            // Acha a caixa vazia lá no HTML
+            const container = document.getElementById('catalog');
+
+            // Pega cada produto do estoque e faz o processo abaixo
+            produtos.forEach(produto => {
+                
+                // Cria uma caixinha (div) para ser o cartão
+                const card = document.createElement('div');
+                card.className = 'pod-card'; // Aplica o visual do cartão
+
+                let saboresHTML = ''; // Cria um espaço vazio para os sabores
+
+                // PERGUNTA: O produto tem algum sabor na lista?
+                if (produto.sabores.length > 0) {
+                    // SE SIM: Monta a lista de sabores
+                    const listaSabores = produto.sabores.map(sabor => `<li>${sabor}</li>`).join('');
+                    saboresHTML = `<ul class="flavors-list">${listaSabores}</ul>`;
+                } else {
+                    // SE NÃO: Mostra a mensagem de esgotado
+                    saboresHTML = `<p class="no-flavors">Sabores esgotados ou a caminho...</p>`;
+                }
+
+                // Preenche o cartão com o modelo, preço e os sabores que achamos acima
+                card.innerHTML = `
+                    <h2 class="pod-title">${produto.modelo}</h2>
+                    <p class="pod-price">${produto.preco}</p>
+                    <div class="flavors-title">Sabores Disponíveis:</div>
+                    ${saboresHTML}
+                `;
+
+                // Coloca o cartão pronto dentro da caixa principal do site
+                container.appendChild(card);
+            });
+        }
+
+        // Dá o comando (o play) para a função rodar quando a página abrir
+        renderizarCatalogo();
+    </script>
+</body>
+</html>

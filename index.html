@@ -1,167 +1,230 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
+<!DOCTYPE html> <html lang="pt-br"> <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MuxPuffHouse - Catálogo de Pods</title>
     
     <style>
-        /* Ensina o navegador a usar a sua fonte de grafite */
+        /* --- ÁREA DE ESTILOS (CSS) --- */
+        /* Aqui você muda cores, tamanhos, fontes e posições */
+
+        /* Importando uma fonte personalizada chamada 'site' do arquivo 'site.otf' */
         @font-face {
-            font-family: 'site'; /* Dá o apelido de 'site' para a fonte */
-            src: url('site.otf') format('opentype'); /* Procura o arquivo na pasta */
+            font-family: 'site';
+            src: url('site.otf') format('opentype');
         }
 
-        /* Guarda as cores do site para não precisar repetir toda hora */
+        /* Variáveis: Se você quiser mudar a cor do site inteiro, mude apenas aqui! */
         :root {
-            --bg-color: #050505; /* Fundo preto */
-            --card-bg: #1e1e1e; /* Fundo cinza escuro dos cards */
-            --text-color: #f5f5f5; /* Texto claro */
-            --accent-color: #aa04aa; /* O seu roxo principal */
-            --secondary-text: #a4b0be; /* Cinza para textos secundários */
+            --bg-color: #050505; /* Cor de fundo (quase preto) */
+            --card-bg: #1e1e1e; /* Cor do fundo dos "cartões" dos produtos */
+            --text-color: #f5f5f5; /* Cor principal do texto (branco gelo) */
+            --accent-color: #aa04aa; /* Cor de destaque (Roxo/Magenta) - Mude aqui! */
+            --secondary-text: #a4b0be; /* Cor de texto secundário (cinza claro) */
+            --whatsapp-green: #25d366; /* Cor verde oficial do botão do WhatsApp */
+            --danger-color: #ff4757; /* Cor vermelha para o botão de apagar do carrinho */
         }
 
-        /* Configurações gerais da página inteira */
+        /* Configurações gerais do corpo da página */
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Fonte dos textos menores */
-            color: var(--text-color); /* Pinta os textos com a cor clara */
-            margin: 0; /* Tira as margens padrão do navegador */
-            padding: 20px; /* Dá um respiro nas bordas da tela */
-            display: flex; /* Começa a organizar os itens na tela... */
-            flex-direction: column; /* ...colocando um embaixo do outro */
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Fonte padrão do texto */
+            color: var(--text-color); /* Usa a variável de cor de texto criada acima */
+            margin: 0; /* Remove margens padrão do navegador */
+            padding: 20px; /* Espaço interno nas bordas da tela */
+            display: flex; /* Permite alinhar elementos facilmente */
+            flex-direction: column; /* Organiza os itens de cima para baixo */
             align-items: center; /* Centraliza tudo no meio da tela */
-
-            /* Configuração do fundo de imagem */
-            background-color: var(--bg-color); /* Fundo preto por garantia */
-            background-image: url('site.png'); /* Puxa a sua imagem */
-            background-size: cover; /* Faz a imagem cobrir tudo */
+            background-color: var(--bg-color); /* Usa a cor de fundo criada acima */
+            
+            /* Imagem de fundo da página */
+            background-image: url('site.png'); /* Tente trocar 'site.png' pelo nome de outra imagem sua */
+            background-size: cover; /* Faz a imagem cobrir a tela toda */
             background-position: center; /* Centraliza a imagem */
-            background-repeat: no-repeat; /* Não deixa a imagem se repetir */
-            background-attachment: fixed; /* Deixa o fundo parado quando rola a tela */
+            background-repeat: no-repeat; /* Não deixa a imagem se repetir como um mosaico */
+            background-attachment: fixed; /* A imagem fica parada enquanto você rola a página */
+            padding-bottom: 100px; /* Dá um espaço no final para a barra do carrinho não tampar os produtos */
         }
 
-        /* Cabeçalho onde fica o nome MuxPuffHouse */
-        header {
-            text-align: center; /* Centraliza o texto */
-            margin-bottom: 40px; /* Empurra os cards mais para baixo */
-        }
-
-        /* O título principal (h1) */
-        header h1 {
-            font-family: 'site', cursive; /* Usa a sua fonte grafite */
-            color: var(--accent-color); /* Pinta de roxo */
-            font-size: 3.5rem; /* Deixa a letra bem grande */
-            margin-bottom: 5px; /* Espaço pequeno até o subtítulo */
-        }
-
-        /* O subtítulo "Catálogo Oficial..." */
-        header p {
-            color: var(--secondary-text); /* Pinta de cinza */
-            font-size: 1.1rem; /* Tamanho da letra */
-            margin-top: 0; /* Tira o espaço sobrando em cima */
-        }
-
-        /* A caixa gigante que vai segurar todos os cartões de pods */
-        .catalog-container {
-            display: grid; /* Ativa o modo de grade */
-            /* Faz a mágica de criar colunas sozinhas dependendo do tamanho da tela */
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px; /* Distância entre um cartão e outro */
-            width: 100%; /* Ocupa a tela toda */
-            max-width: 1200px; /* Mas para de crescer se a tela for muito larga */
-        }
-
-        /* O visual de CADA cartão de pod */
-        .pod-card {
-            background-color: var(--card-bg); /* Fundo cinza escuro */
-            border-radius: 12px; /* Deixa as pontas redondinhas */
-            padding: 25px; /* Espaço para o texto não colar nas bordas */
-            box-shadow: 0 4px 6px rgba(0,0,0,0.3); /* Sombrinha preta no fundo */
-            border-top: 4px solid var(--accent-color); /* Linha roxa em cima do card */
-            transition: transform 0.2s ease; /* Prepara para a animação do mouse */
-        }
-
-        /* O que acontece quando passa o mouse por cima do cartão */
-        .pod-card:hover {
-            transform: translateY(-5px); /* Dá um pulinho de 5 pixels para cima */
-        }
-
-        /* Nome do Pod dentro do cartão */
-        .pod-title {
-            font-size: 1.4rem; /* Tamanho da letra */
-            margin: 0 0 10px 0; /* Margem só embaixo */
-            color: #ffffff; /* Letra branca */
-        }
-
-        /* Preço do Pod */
-        .pod-price {
-            font-size: 1.5rem; /* Letra maior */
-            font-weight: bold; /* Letra gordinha (negrito) */
+        /* Estilos do cabeçalho (Título e subtítulo) */
+        header { text-align: center; margin-bottom: 40px; }
+        header h1 { 
+            font-family: 'site', cursive; /* Usa a fonte personalizada importada lá em cima */
             color: var(--accent-color); /* Cor roxa */
-            margin: 0 0 20px 0; /* Espaço embaixo */
+            font-size: 3.5rem; /* Tamanho da letra do título */
+            margin-bottom: 5px; 
+        }
+        header p { color: var(--secondary-text); font-size: 1.1rem; margin-top: 0; }
+
+        /* A "caixa" que segura todos os produtos */
+        .catalog-container {
+            display: grid; /* Sistema de grade para organizar os produtos lado a lado */
+            /* Essa linha mágica faz os produtos se adaptarem a qualquer tela (celular ou PC) automaticamente */
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px; /* Espaço entre os cartões de produtos */
+            width: 100%;
+            max-width: 1200px; /* Largura máxima para não ficar esticado em telas muito grandes */
         }
 
-        /* Área onde fica o texto "Sabores Disponíveis:" */
-        .flavors-title {
-            font-size: 1rem;
-            color: var(--secondary-text);
-            border-bottom: 1px solid #333; /* Linha fininha separando a lista */
-            padding-bottom: 5px;
-            margin-bottom: 10px;
+        /* O "cartão" de cada produto individual */
+        .pod-card {
+            background-color: var(--card-bg);
+            border-radius: 12px; /* Arredonda as bordas */
+            padding: 25px; /* Espaço interno do cartão */
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3); /* Sombra suave para dar efeito 3D */
+            border-top: 4px solid var(--accent-color); /* Linha roxa no topo do cartão */
+            transition: transform 0.2s ease; /* Efeito suave ao interagir */
         }
 
-        /* A lista de sabores (ul) */
-        .flavors-list {
-            list-style-type: none; /* Tira as bolinhas pretas padrão do HTML */
-            padding: 0;
-            margin: 0;
-        }
+        /* Estilos dos textos dentro do cartão de produto */
+        .pod-title { font-size: 1.4rem; margin: 0 0 10px 0; color: #ffffff; }
+        .pod-price { font-size: 1.5rem; font-weight: bold; color: var(--accent-color); margin: 0 0 20px 0; }
+        .flavors-title { font-size: 1rem; color: var(--secondary-text); border-bottom: 1px solid #333; padding-bottom: 5px; margin-bottom: 10px; }
 
-        /* O visual de cada sabor da lista (li) */
+        /* Lista de sabores */
+        .flavors-list { list-style-type: none; padding: 0; margin: 0; }
+        
+        /* Cada sabor individual (o botão clicável) */
         .flavors-list li {
-            background-color: #2f3542; /* Fundo mais claro que o card */
+            background-color: #2f3542;
             margin-bottom: 8px; /* Espaço entre os sabores */
-            padding: 8px 12px; /* Espaço interno da caixinha do sabor */
-            border-radius: 6px; /* Pontas redondas */
+            padding: 10px 12px;
+            border-radius: 6px;
             font-size: 0.95rem;
+            cursor: pointer; /* Muda a setinha do mouse para uma "mãozinha" indicando que é clicável */
+            display: flex;
+            justify-content: space-between; /* Separa o nome do sabor da tradução */
+            align-items: center;
+            transition: background 0.3s; /* Efeito suave ao passar o mouse */
         }
 
-        /* Coloca a fumacinha antes de cada sabor automaticamente */
-        .flavors-list li::before {
-            content: '💨 ';
+        /* O que acontece quando o mouse passa por cima de um sabor */
+        .flavors-list li:hover { background-color: #3e4453; /* Fica ligeiramente mais claro */ }
+        
+        /* Adiciona o emoji de fumacinha antes de cada sabor automaticamente */
+        .flavors-list li::before { content: '💨 '; }
+
+        /* Estilo da tradução que fica escondida por padrão */
+        .flavors-list li .translation {
+            display: none; /* Esconde o texto */
+            font-size: 0.8rem;
+            color: var(--accent-color);
+            font-weight: bold;
+        }
+
+        /* Mostra a tradução apenas quando o mouse passa por cima (hover) */
+        .flavors-list li:hover .translation { display: inline; }
+
+        /* --- BARRA DO CARRINHO (RODAPÉ) --- */
+        .cart-bar {
+            position: fixed; /* Fica fixa na tela, mesmo se rolar a página */
+            bottom: 0; left: 0; right: 0; /* Fixa bem colada na parte de baixo */
+            background: rgba(20, 20, 20, 0.98); /* Fundo quase preto e transparente */
+            padding: 15px 20px;
+            display: none; /* Escondida por padrão. O JS vai mostrar quando tiver algo no carrinho */
+            justify-content: space-between;
+            align-items: center;
+            border-top: 2px solid var(--accent-color);
+            z-index: 1000; /* Garante que fique por cima de tudo */
+        }
+
+        .cart-info { font-weight: bold; font-size: 1.1rem; }
+
+        /* Botão "Ver Pedido" */
+        .btn-view-cart {
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        /* --- MODAL (JANELA) DO CARRINHO --- */
+        /* O fundo escuro que aparece atrás da janelinha do carrinho */
+        .cart-modal-overlay {
+            display: none; /* Escondido por padrão */
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0; /* Cobre a tela toda */
+            background: rgba(0,0,0,0.8); /* Fundo preto transparente */
+            z-index: 2000; /* Fica por cima de tudo na tela */
+            justify-content: center; /* Centraliza a janelinha na horizontal */
+            align-items: center; /* Centraliza a janelinha na vertical */
+        }
+
+        /* A janelinha do carrinho em si */
+        .cart-modal {
+            background-color: var(--card-bg);
+            width: 90%;
+            max-width: 400px;
+            border-radius: 12px;
+            padding: 20px;
+            max-height: 80vh; /* Altura máxima para não passar da tela */
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Cabeçalho da janelinha (Título e botão de fechar) */
+        .cart-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #333; /* Linha divisória */
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+
+        .cart-modal-header h2 { margin: 0; font-size: 1.5rem; color: var(--accent-color); }
+        .close-btn { background: none; border: none; color: white; font-size: 1.5rem; cursor: pointer; }
+
+        /* Área onde os itens do pedido vão aparecer (permite rolagem se tiver muitos itens) */
+        .cart-items-list {
+            overflow-y: auto; 
+            flex-grow: 1;
+            margin-bottom: 15px;
+        }
+
+        /* Estilo de cada item adicionado no carrinho */
+        .cart-item {
+            background: #2f3542;
+            padding: 10px;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .cart-item-details { display: flex; flex-direction: column; }
+        .cart-item-model { font-size: 0.85rem; color: var(--secondary-text); }
+        .cart-item-flavor { font-weight: bold; }
+
+        /* Botão vermelho "X" para remover item do carrinho */
+        .btn-remove {
+            background: var(--danger-color);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 5px 10px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        /* Botão verde do WhatsApp */
+        .btn-finalize {
+            background-color: var(--whatsapp-green);
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 8px;
+            font-weight: bold;
             font-size: 1.1rem;
-        }
-
-        /* Estilo da mensagem quando não tem sabores */
-        .no-flavors {
-            color: #747d8c; /* Letra cinza escuro */
-            font-style: italic; /* Letra deitadinha */
-            font-size: 0.9rem;
-        }
-
-        /* === LINHAS NOVAS: VISUAL DO BOTÃO DO WHATSAPP === */
-        .whatsapp-button {
-            position: fixed; /* Deixa o botão travado na tela */
-            bottom: 20px; /* Distância do fundo da tela */
-            right: 20px; /* Distância do canto direito da tela */
-            background-color: #25d366; /* Verde oficial do WhatsApp */
-            color: white; /* Letra branca */
-            text-decoration: none; /* Tira a linha de baixo do texto */
-            padding: 12px 20px; /* Espaço dentro do botão */
-            border-radius: 50px; /* Deixa ele bem arredondado */
-            font-size: 1.1rem; /* Tamanho da letra */
-            font-weight: bold; /* Deixa o texto gordinho */
-            box-shadow: 0 4px 10px rgba(0,0,0,0.5); /* Sombra para dar destaque */
-            display: flex; /* Ajuda a alinhar o emoji com o texto */
-            align-items: center; /* Centraliza os dois no meio do botão */
-            gap: 8px; /* Espacinho entre o emoji e o texto */
-            z-index: 1000; /* Garante que o botão fique na frente de tudo */
-            transition: transform 0.2s ease; /* Animação suave */
-        }
-
-        /* Efeito de quando passa o mouse ou aperta o botão */
-        .whatsapp-button:hover {
-            transform: scale(1.05); /* O botão dá uma leve crescidinha */
+            cursor: pointer;
+            width: 100%;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
         }
     </style>
 </head>
@@ -172,91 +235,213 @@
         <p>Catálogo Oficial de Pods</p>
     </header>
 
-    <div class="catalog-container" id="catalog">
+    <div class="catalog-container" id="catalog"></div>
+
+    <div id="cartBar" class="cart-bar">
+        <div class="cart-info">🛒 <span id="cartCount">0</span> item(s)</div>
+        <button onclick="abrirCarrinho()" class="btn-view-cart">Ver Pedido</button>
     </div>
 
-    <a href="https://wa.me/5551996155848?text=Olá!%20Vim%20pelo%20catálogo%20da%20MuxPuffHouse!" target="_blank" class="whatsapp-button">
-        💬 Pedir no WhatsApp
-    </a>
+    <div id="cartModalOverlay" class="cart-modal-overlay">
+        <div class="cart-modal">
+            <div class="cart-modal-header">
+                <h2>Seu Pedido</h2>
+                <button onclick="fecharCarrinho()" class="close-btn">✖</button>
+            </div>
+            
+            <div id="cartItemsList" class="cart-items-list"></div>
+
+            <button onclick="finalizarPedido()" class="btn-finalize">
+                💬 Enviar para o WhatsApp
+            </button>
+        </div>
+    </div>
 
     <script>
-        // SEU ESTOQUE: 
-        const produtos = [
-            {
-                modelo: "Dinner lady 50000 (2 tanques)",
-                preco: "175$",
-                sabores: ["Mint Ice / Pineapple Ice", "Grape Ice / Mint Ice"] 
-            },
-            {
-                modelo: "Elfbar bc pro 45000",
-                preco: "170$",
-                sabores: ["Grape Ice", "Cool Menthol","Watermelon Ice", "Pineapple POM", "Grape Twist", "Strawberry Ice"] 
-            },
-            {
-                modelo: "Black sheep 40000 (2 tanques)",
-                preco: "180$",
-                sabores: ["Blueberry Bubble / Sour Green Apple", "Grape / Menthol"]
-            },
-            {
-                modelo: "Ignite v300 30000",
-                preco: "150$",
-                sabores: ["Icy Mint", "Banana Coconut Water", "Minty Melon", "Watermelon Ice", "Strawberry Ice", "Aloe Grape Ice", "Strawberry Kiwi", "Strawberry Banana", "grape ice"]
-            },
-            {
-                modelo: "Elfbar ice king 40000",
-                preco: "160$",
-                sabores: ["Black Mint", "Triple Berry", "Neon Twist", "Dragon Strawnana", "Cherry Strazz", "Passion Flash", "Strawberry Spark", "Watermelon Ice"]
-            },
-            {
-                modelo: "Ignite v250 25000",
-                preco: "145$",
-                sabores: ["Grape Ice (dourado)", "Icy mint", "Strawberry Kiwi", "Blueberry", "Ice Watermelon Ice (dourado e preto)", "Strawberry Ice (dourado e preto)"]
-            },
-            {
-                modelo: "Elfbar bc 15000",
-                preco: "100$",
-                sabores: ["Strawberry Ice", "Watermelon Ice", "Strawberry Kiwi", "Sakura Grape"]
+        // 1. DICIONÁRIO DE TRADUÇÃO (Frases Completas)
+        // Lado esquerdo: Nome original em letras minúsculas. Lado direito: Tradução perfeita.
+        // Se adicionar um sabor novo no estoque, não esqueça de adicionar a tradução aqui!
+        const traducoes = {
+            "mint ice / pineapple ice": "Hortelã Gelada / Abacaxi Gelado",
+            "grape ice / mint ice": "Uva Gelada / Hortelã Gelada",
+            "grape ice": "Uva Gelada",
+            "cool menthol": "Mentol Refrescante",
+            "watermelon ice": "Melancia Gelada",
+            "pineapple pom": "Abacaxi com Romã",
+            "grape twist": "Tornado de Uva",
+            "strawberry ice": "Morango Gelado",
+            "blueberry bubble / sour green apple": "Chiclete de Mirtilo / Maçã Verde Azedinha",
+            "grape / menthol": "Uva / Mentol",
+            "icy mint": "Hortelã Gelada",
+            "banana coconut water": "Banana com Água de Coco",
+            "minty melon": "Melão Refrescante",
+            "aloe grape ice": "Babosa com Uva Gelada",
+            "strawberry kiwi": "Morango com Kiwi",
+            "strawberry banana": "Morango com Banana",
+            "black mint": "Menta Black",
+            "triple berry": "Mix de Frutas Vermelhas",
+            "neon twist": "Mistura Neon",
+            "dragon strawnana": "Pitaya, Morango e Banana",
+            "cherry strazz": "Cereja e Morango",
+            "passion flash": "Explosão de Maracujá",
+            "strawberry spark": "Morango Efervescente",
+            "grape ice (dourado)": "Uva Gelada (Dourado)",
+            "blueberry": "Mirtilo",
+            "ice watermelon ice (dourado e preto)": "Melancia Gelada (Dourado e Preto)",
+            "strawberry ice (dourado e preto)": "Morango Gelado (Dourado e Preto)",
+            "sakura grape": "Uva com Flor de Cerejeira"
+        };
+
+        // Função que pega o nome do sabor e devolve a tradução em português
+        function traduzirSabor(texto) {
+            // Transforma o sabor em letras minúsculas para comparar com o dicionário
+            const textoBusca = texto.toLowerCase();
+            
+            // Verifica se a frase inteira existe no dicionário e retorna ela
+            if (traducoes[textoBusca]) {
+                return traducoes[textoBusca]; 
+            } else {
+                return texto; // Se não achar a tradução, deixa o nome original
             }
+        }
+
+        // 2. ESTOQUE DE PRODUTOS
+        // Para adicionar um novo produto, copie uma linha, cole e mude os dados.
+        // Dica: escreva os sabores exatamente como estão ali no dicionário de tradução.
+        const produtos = [
+            { modelo: "Dinner lady 50000 (2 tanques)", preco: "175$", sabores: ["Mint Ice / Pineapple Ice", "Grape Ice / Mint Ice"] },
+            { modelo: "Elfbar bc pro 45000", preco: "170$", sabores: ["Grape Ice", "Cool Menthol","Watermelon Ice", "Pineapple POM", "Grape Twist", "Strawberry Ice"] },
+            { modelo: "Black sheep 40000 (2 tanques)", preco: "180$", sabores: ["Blueberry Bubble / Sour Green Apple", "Grape / Menthol"] },
+            { modelo: "Ignite v300 30000", preco: "150$", sabores: ["Icy Mint", "Banana Coconut Water", "Minty Melon", "Watermelon Ice", "Strawberry Ice", "Aloe Grape Ice", "Strawberry Kiwi", "Strawberry Banana", "grape ice"] },
+            { modelo: "Elfbar ice king 40000", preco: "160$", sabores: ["Black Mint", "Triple Berry", "Neon Twist", "Dragon Strawnana", "Cherry Strazz", "Passion Flash", "Strawberry Spark", "Watermelon Ice"] },
+            { modelo: "Ignite v250 25000", preco: "145$", sabores: ["Grape Ice (dourado)", "Icy mint", "Strawberry Kiwi", "Blueberry", "Ice Watermelon Ice (dourado e preto)", "Strawberry Ice (dourado e preto)"] },
+            { modelo: "Elfbar bc 15000", preco: "100$", sabores: ["Strawberry Ice", "Watermelon Ice", "Strawberry Kiwi", "Sakura Grape"] }
         ];
 
-        // FUNÇÃO QUE MONTA O SITE
-        function renderizarCatalogo() {
-            // Acha a caixa vazia lá no HTML
-            const container = document.getElementById('catalog');
+        // 3. LÓGICA DO CARRINHO
+        let carrinho = []; // Inicia uma lista vazia. Aqui vão ficar os produtos do cliente.
 
-            // Pega cada produto do estoque e faz o processo abaixo
-            produtos.forEach(produto => {
-                
-                // Cria uma caixinha (div) para ser o cartão
-                const card = document.createElement('div');
-                card.className = 'pod-card'; // Aplica o visual do cartão
+        // Função chamada quando o cliente clica em um sabor
+        function adicionarAoCarrinho(modelo, sabor) {
+            carrinho.push({ modelo, sabor }); // Adiciona o item na lista
+            atualizarInterfaceCarrinho(); // Atualiza os numerozinhos na tela
+            alert(`✅ ${sabor} adicionado ao carrinho!`); // Mostra aviso de sucesso
+        }
 
-                let saboresHTML = ''; // Cria um espaço vazio para os sabores
+        // Função chamada quando o cliente clica no "X" vermelho na janela do carrinho
+        function removerDoCarrinho(index) {
+            carrinho.splice(index, 1); // Remove 1 item da lista baseado na posição dele
+            atualizarInterfaceCarrinho(); // Atualiza a contagem na barra
+            renderizarItensDoCarrinho(); // Recria a lista na janela para refletir a exclusão
+            
+            // Se o carrinho ficar vazio, fecha a janela preta
+            if(carrinho.length === 0) {
+                fecharCarrinho();
+            }
+        }
 
-                // PERGUNTA: O produto tem algum sabor na lista?
-                if (produto.sabores.length > 0) {
-                    // SE SIM: Monta a lista de sabores
-                    const listaSabores = produto.sabores.map(sabor => `<li>${sabor}</li>`).join('');
-                    saboresHTML = `<ul class="flavors-list">${listaSabores}</ul>`;
-                } else {
-                    // SE NÃO: Mostra a mensagem de esgotado
-                    saboresHTML = `<p class="no-flavors">Sabores esgotados ou a caminho...</p>`;
-                }
+        // Faz a barrinha lá embaixo aparecer ou sumir dependendo se tem itens
+        function atualizarInterfaceCarrinho() {
+            const bar = document.getElementById('cartBar');
+            const count = document.getElementById('cartCount');
+            
+            if (carrinho.length > 0) {
+                bar.style.display = 'flex'; // Mostra a barra
+                count.innerText = carrinho.length; // Atualiza o numero
+            } else {
+                bar.style.display = 'none'; // Esconde a barra
+            }
+        }
 
-                // Preenche o cartão com o modelo, preço e os sabores que achamos acima
-                card.innerHTML = `
-                    <h2 class="pod-title">${produto.modelo}</h2>
-                    <p class="pod-price">${produto.preco}</p>
-                    <div class="flavors-title">Sabores Disponíveis:</div>
-                    ${saboresHTML}
+        // Mostra a janela preta do carrinho
+        function abrirCarrinho() {
+            document.getElementById('cartModalOverlay').style.display = 'flex';
+            renderizarItensDoCarrinho(); // Carrega os itens antes de exibir a tela
+        }
+
+        // Esconde a janela preta do carrinho
+        function fecharCarrinho() {
+            document.getElementById('cartModalOverlay').style.display = 'none';
+        }
+
+        // "Desenha" os produtos que o cliente escolheu dentro da janela do carrinho
+        function renderizarItensDoCarrinho() {
+            const lista = document.getElementById('cartItemsList');
+            lista.innerHTML = ''; // Limpa a lista na tela antes de desenhar de novo
+
+            // Passa por cada produto do carrinho e cria o HTML dele
+            carrinho.forEach((item, index) => {
+                lista.innerHTML += `
+                    <div class="cart-item">
+                        <div class="cart-item-details">
+                            <span class="cart-item-model">${item.modelo}</span>
+                            <span class="cart-item-flavor">${item.sabor}</span>
+                        </div>
+                        <button onclick="removerDoCarrinho(${index})" class="btn-remove">X</button>
+                    </div>
                 `;
-
-                // Coloca o cartão pronto dentro da caixa principal do site
-                container.appendChild(card);
             });
         }
 
-        // Dá o comando (o play) para a função rodar quando a página abrir
+        // Função que manda a mensagem para o seu WhatsApp
+        function finalizarPedido() {
+            // MUDE SEU NÚMERO AQUI (55 + DDD + Número)
+            const numeroTel = "5551996155848"; 
+            
+            let mensagem = "Olá! Gostaria de fazer o seguinte pedido:\n\n";
+            
+            // Adiciona cada item do carrinho na mensagem do zap
+            carrinho.forEach((item, index) => {
+                mensagem += `*Item ${index + 1}:* ${item.modelo}\n*Sabor:* ${item.sabor}\n\n`;
+            });
+
+            mensagem += "Aguardo a confirmação e os dados para pagamento!";
+
+            // Cria o link mágico que abre o WhatsApp já com a mensagem pronta
+            const linkZap = `https://wa.me/${numeroTel}?text=${encodeURIComponent(mensagem)}`;
+            window.open(linkZap, '_blank'); // Abre o link
+        }
+
+        // 4. RENDERIZAÇÃO DO CATÁLOGO (Cria a vitrine na tela inicial)
+        function renderizarCatalogo() {
+            const container = document.getElementById('catalog'); // Pega a área vazia do HTML
+
+            // Passa por cada produto que você cadastrou no estoque
+            produtos.forEach(produto => {
+                const card = document.createElement('div'); // Cria o "cartão" do produto
+                card.className = 'pod-card';
+
+                let saboresHTML = '';
+                // Verifica se tem sabores em estoque
+                if (produto.sabores.length > 0) {
+                    // Transforma a lista de sabores em botões HTML
+                    const listaSabores = produto.sabores.map(sabor => {
+                        const traducao = traduzirSabor(sabor); // Chama nossa função nova de tradução
+                        // Cria o botão do sabor já com o evento de clique e a tradução
+                        return `
+                            <li onclick="adicionarAoCarrinho('${produto.modelo}', '${sabor}')" title="Clique para adicionar">
+                                <span>${sabor}</span>
+                                <span class="translation">(${traducao})</span>
+                            </li>`;
+                    }).join('');
+                    saboresHTML = `<ul class="flavors-list">${listaSabores}</ul>`;
+                } else {
+                    saboresHTML = `<p class="no-flavors">Sabores esgotados...</p>`;
+                }
+
+                // Junta tudo: Título, preço e a lista de botões de sabores
+                card.innerHTML = `
+                    <h2 class="pod-title">${produto.modelo}</h2>
+                    <p class="pod-price">${produto.preco}</p>
+                    <div class="flavors-title">Toque no sabor para adicionar:</div>
+                    ${saboresHTML}
+                `;
+                
+                container.appendChild(card); // Coloca o cartão finalizado na tela
+            });
+        }
+
+        // Quando o site abre, roda essa função para desenhar a vitrine automaticamente
         renderizarCatalogo();
     </script>
 </body>
